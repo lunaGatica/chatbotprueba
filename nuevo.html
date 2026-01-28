@@ -1,0 +1,1343 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chatbot - Growshop Online</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #1a5d1a;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 1100px;
+            background-color: #f5f5f5;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #2e7d32, #1b5e20);
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 1.8rem;
+            margin-bottom: 5px;
+        }
+        
+        .header p {
+            opacity: 0.9;
+            font-size: 0.9rem;
+        }
+        
+        .main-content {
+            display: flex;
+            height: 600px;
+        }
+        
+        .sidebar {
+            width: 30%;
+            background-color: #e8f5e9;
+            padding: 20px;
+            border-right: 1px solid #c8e6c9;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .sidebar-section {
+            margin-bottom: 25px;
+        }
+        
+        .sidebar h3 {
+            color: #2e7d32;
+            margin-bottom: 15px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #a5d6a7;
+        }
+        
+        .categories {
+            list-style: none;
+        }
+        
+        .category-item {
+            padding: 12px 15px;
+            margin-bottom: 10px;
+            background-color: white;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            border-left: 4px solid #4caf50;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        
+        .category-item:hover {
+            background-color: #c8e6c9;
+            transform: translateX(5px);
+        }
+        
+        .category-item.active {
+            background-color: #4caf50;
+            color: white;
+            font-weight: bold;
+        }
+        
+        .category-icon {
+            margin-right: 10px;
+            font-size: 1.1rem;
+        }
+        
+        .cart-summary {
+            background-color: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            border-top: 3px solid #ff9800;
+        }
+        
+        .cart-summary h3 {
+            color: #ff9800;
+            border-bottom-color: #ffb74d;
+        }
+        
+        .cart-info {
+            margin-top: 10px;
+        }
+        
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            border-bottom: 1px dashed #eee;
+        }
+        
+        .cart-item:last-child {
+            border-bottom: none;
+        }
+        
+        .cart-item-name {
+            font-size: 0.85rem;
+            flex-grow: 1;
+            margin-right: 10px;
+        }
+        
+        .cart-item-price {
+            font-weight: bold;
+            color: #2e7d32;
+            font-size: 0.9rem;
+        }
+        
+        .cart-total {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 2px solid #ff9800;
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+        
+        .cart-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 10px;
+        }
+        
+        .cart-button {
+            flex-grow: 1;
+            padding: 8px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.85rem;
+        }
+        
+        .cart-button.view {
+            background-color: #4caf50;
+            color: white;
+        }
+        
+        .cart-button.view:hover {
+            background-color: #388e3c;
+        }
+        
+        .cart-button.clear {
+            background-color: #f44336;
+            color: white;
+        }
+        
+        .cart-button.clear:hover {
+            background-color: #d32f2f;
+        }
+        
+        .contact-info {
+            background-color: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: auto;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            border-top: 3px solid #2e7d32;
+        }
+        
+        .contact-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 12px;
+            padding: 8px;
+            border-radius: 6px;
+            transition: background-color 0.2s;
+        }
+        
+        .contact-item:hover {
+            background-color: #f1f8e9;
+        }
+        
+        .contact-icon {
+            width: 35px;
+            height: 35px;
+            background-color: #e8f5e9;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 12px;
+            color: #2e7d32;
+            font-size: 1rem;
+        }
+        
+        .contact-text {
+            flex-grow: 1;
+        }
+        
+        .contact-text p {
+            font-size: 0.85rem;
+            color: #666;
+        }
+        
+        .contact-text strong {
+            color: #2e7d32;
+            font-size: 0.9rem;
+        }
+        
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 15px;
+        }
+        
+        .social-link {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.2rem;
+            text-decoration: none;
+            transition: transform 0.3s;
+        }
+        
+        .social-link:hover {
+            transform: scale(1.1);
+        }
+        
+        .social-instagram {
+            background: linear-gradient(45deg, #405DE6, #5851DB, #833AB4, #C13584, #E1306C, #FD1D1D);
+        }
+        
+        .social-facebook {
+            background-color: #1877F2;
+        }
+        
+        .chat-window {
+            width: 70%;
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+        }
+        
+        .chat-messages {
+            flex-grow: 1;
+            overflow-y: auto;
+            padding-right: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .message {
+            margin-bottom: 15px;
+            padding: 12px 15px;
+            border-radius: 10px;
+            max-width: 85%;
+            word-wrap: break-word;
+        }
+        
+        .bot-message {
+            background-color: #e0f2f1;
+            align-self: flex-start;
+            border-top-left-radius: 0;
+            border-left: 4px solid #00796b;
+        }
+        
+        .user-message {
+            background-color: #c8e6c9;
+            align-self: flex-end;
+            margin-left: auto;
+            border-top-right-radius: 0;
+            border-right: 4px solid #2e7d32;
+        }
+        
+        .products-container {
+            margin-top: 10px;
+        }
+        
+        .product-item {
+            background-color: white;
+            padding: 10px;
+            margin-bottom: 8px;
+            border-radius: 6px;
+            border-left: 3px solid #81c784;
+            font-size: 0.9rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .product-info {
+            flex-grow: 1;
+        }
+        
+        .product-number {
+            display: inline-block;
+            width: 25px;
+            height: 25px;
+            background-color: #4caf50;
+            color: white;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 25px;
+            margin-right: 8px;
+            font-size: 0.8rem;
+        }
+        
+        .add-to-cart-btn {
+            background-color: #ff9800;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            transition: background-color 0.2s;
+            white-space: nowrap;
+        }
+        
+        .add-to-cart-btn:hover {
+            background-color: #f57c00;
+        }
+        
+        .add-to-cart-btn.added {
+            background-color: #4caf50;
+            cursor: not-allowed;
+        }
+        
+        .add-to-cart-btn.added:hover {
+            background-color: #4caf50;
+        }
+        
+        .horarios-container, .contacto-container, .pedido-container, .confirmacion-container {
+            background-color: #f1f8e9;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+            border: 1px dashed #7cb342;
+        }
+        
+        .pedido-container {
+            border: 1px dashed #ff9800;
+            background-color: #fff3e0;
+        }
+        
+        .confirmacion-container {
+            border: 1px dashed #4caf50;
+            background-color: #e8f5e9;
+            text-align: center;
+        }
+        
+        .horarios-container h4, .contacto-container h4, .pedido-container h4 {
+            color: #558b2f;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .pedido-container h4 {
+            color: #ff9800;
+        }
+        
+        .horarios-container h4 i, .contacto-container h4 i, .pedido-container h4 i {
+            margin-right: 8px;
+        }
+        
+        .order-items {
+            margin: 15px 0;
+        }
+        
+        .order-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            background-color: white;
+            margin-bottom: 8px;
+            border-radius: 6px;
+            border-left: 3px solid #ff9800;
+        }
+        
+        .order-item-name {
+            flex-grow: 1;
+        }
+        
+        .order-item-price {
+            font-weight: bold;
+            color: #2e7d32;
+            margin: 0 15px;
+        }
+        
+        .remove-item-btn {
+            background-color: #ffebee;
+            color: #c62828;
+            border: 1px solid #ffcdd2;
+            padding: 3px 8px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            transition: all 0.2s;
+        }
+        
+        .remove-item-btn:hover {
+            background-color: #ffcdd2;
+        }
+        
+        .order-total {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-top: 2px solid #ff9800;
+            font-weight: bold;
+            font-size: 1.2rem;
+            color: #2e7d32;
+        }
+        
+        .order-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .order-button {
+            flex-grow: 1;
+            padding: 10px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .order-button.confirm {
+            background-color: #4caf50;
+            color: white;
+        }
+        
+        .order-button.confirm:hover {
+            background-color: #388e3c;
+        }
+        
+        .order-button.cancel {
+            background-color: #f44336;
+            color: white;
+        }
+        
+        .order-button.cancel:hover {
+            background-color: #d32f2f;
+        }
+        
+        .chat-input {
+            display: flex;
+            border-top: 1px solid #ddd;
+            padding-top: 15px;
+        }
+        
+        .chat-input input {
+            flex-grow: 1;
+            padding: 12px 15px;
+            border: 1px solid #a5d6a7;
+            border-radius: 25px;
+            outline: none;
+            font-size: 1rem;
+            background-color: white;
+        }
+        
+        .chat-input input:focus {
+            border-color: #2e7d32;
+            box-shadow: 0 0 0 2px rgba(46, 125, 50, 0.2);
+        }
+        
+        .chat-input button {
+            background-color: #2e7d32;
+            color: white;
+            border: none;
+            width: 50px;
+            border-radius: 50%;
+            margin-left: 10px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .chat-input button:hover {
+            background-color: #1b5e20;
+        }
+        
+        .quick-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 10px;
+        }
+        
+        .quick-button {
+            background-color: white;
+            border: 1px solid #4caf50;
+            color: #2e7d32;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .quick-button:hover {
+            background-color: #e8f5e9;
+        }
+        
+        .welcome-message {
+            background-color: #e8f5e9;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            margin: 20px;
+            border: 2px dashed #4caf50;
+        }
+        
+        .welcome-message h3 {
+            color: #2e7d32;
+            margin-bottom: 10px;
+        }
+        
+        .welcome-message p {
+            color: #555;
+            margin-bottom: 15px;
+        }
+        
+        .footer {
+            text-align: center;
+            padding: 15px;
+            background-color: #e8f5e9;
+            color: #2e7d32;
+            font-size: 0.9rem;
+            border-top: 1px solid #c8e6c9;
+        }
+        
+        @media (max-width: 768px) {
+            .main-content {
+                flex-direction: column;
+                height: auto;
+            }
+            
+            .sidebar, .chat-window {
+                width: 100%;
+            }
+            
+            .sidebar {
+                max-height: 350px;
+                border-right: none;
+                border-bottom: 1px solid #c8e6c9;
+            }
+            
+            .contact-info {
+                margin-top: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1><i class="fas fa-leaf"></i> Chatbot Growshop Online</h1>
+            <p>Explora nuestro catálogo, arma tu pedido y consulta horarios de envío</p>
+        </div>
+        
+        <div class="main-content">
+            <div class="sidebar">
+                <div class="sidebar-section">
+                    <h3>Categorías de Productos</h3>
+                    <ul class="categories">
+                        <li class="category-item" data-category="cultivos">
+                            <i class="fas fa-seedling category-icon"></i>Cultivos y Orgánicos
+                        </li>
+                        <li class="category-item" data-category="fumar">
+                            <i class="fas fa-smoking category-icon"></i>Para Fumar
+                        </li>
+                        <li class="category-item" data-category="merchandising">
+                            <i class="fas fa-tshirt category-icon"></i>Merchandising
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="cart-summary">
+                    <h3><i class="fas fa-shopping-cart"></i> Tu Carrito</h3>
+                    <div class="cart-info" id="cartInfo">
+                        <p style="text-align: center; color: #666; font-style: italic;">Tu carrito está vacío</p>
+                    </div>
+                    <div class="cart-actions">
+                        <button class="cart-button view" id="viewCartBtn">
+                            <i class="fas fa-eye"></i> Ver Pedido
+                        </button>
+                        <button class="cart-button clear" id="clearCartBtn">
+                            <i class="fas fa-trash"></i> Vaciar
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="sidebar-section">
+                    <h3>Acciones Rápidas</h3>
+                    <div class="quick-buttons">
+                        <button class="quick-button" data-action="horarios">Horarios de Envío</button>
+                        <button class="quick-button" data-action="contacto">Información de Contacto</button>
+                        <button class="quick-button" data-action="pedido">Ver Mi Pedido</button>
+                    </div>
+                </div>
+                
+                <div class="contact-info">
+                    <h3><i class="fas fa-address-card"></i> Contacto</h3>
+                    
+                    <div class="contact-item">
+                        <div class="contact-icon">
+                            <i class="fas fa-phone"></i>
+                        </div>
+                        <div class="contact-text">
+                            <strong>Teléfono</strong>
+                            <p>+54 11 1234-5678</p>
+                        </div>
+                    </div>
+                    
+                    <div class="contact-item">
+                        <div class="contact-icon">
+                            <i class="fas fa-envelope"></i>
+                        </div>
+                        <div class="contact-text">
+                            <strong>Email</strong>
+                            <p>info@growshoponline.com</p>
+                        </div>
+                    </div>
+                    
+                    <div class="contact-item">
+                        <div class="contact-icon">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <div class="contact-text">
+                            <strong>Horario de Atención</strong>
+                            <p>Lunes a Viernes: 9:00 - 18:00 hs</p>
+                        </div>
+                    </div>
+                    
+                    <h4 style="margin-top: 15px; margin-bottom: 10px; text-align: center;">Síguenos en Redes</h4>
+                    <div class="social-links">
+                        <a href="https://instagram.com/growshoponline" target="_blank" class="social-link social-instagram">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="https://facebook.com/growshoponline" target="_blank" class="social-link social-facebook">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="chat-window">
+                <div class="chat-messages" id="chatMessages">
+                    <!-- Los mensajes del chat se generan aquí -->
+                </div>
+                
+                <div class="chat-input">
+                    <input type="text" id="userInput" placeholder="Escribe tu mensaje aquí...">
+                    <button id="sendButton">
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </div>
+                
+                <div class="quick-buttons">
+                    <button class="quick-button" data-action="cultivos">Ver Cultivos</button>
+                    <button class="quick-button" data-action="fumar">Ver Para Fumar</button>
+                    <button class="quick-button" data-action="merchandising">Ver Merchandising</button>
+                    <button class="quick-button" data-action="horarios">Horarios de Envío</button>
+                    <button class="quick-button" data-action="contacto">Contacto</button>
+                    <button class="quick-button" data-action="pedido">Mi Pedido</button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p>Growshop Online &copy; 2023 | Todos los productos son para uso personal</p>
+        </div>
+    </div>
+
+    <script>
+        // Base de datos de productos por categoría con precios
+        const productos = {
+            cultivos: [
+                { nombre: "Sustrato Premium para Marihuana", precio: 4500 },
+                { nombre: "Fertilizante Orgánico de Floración", precio: 3200 },
+                { nombre: "Semillas Autoflorecientes AK-47", precio: 2800 },
+                { nombre: "Macetas Geotextiles 10L", precio: 1200 },
+                { nombre: "Kit de Medición de pH", precio: 8900 },
+                { nombre: "Tijeras de Podar Profesionales", precio: 2500 },
+                { nombre: "Lámpara LED 600W Full Spectrum", precio: 45000 },
+                { nombre: "Extractor de Aire 125mm", precio: 9800 },
+                { nombre: "Filtro de Carbón Activado", precio: 11500 },
+                { nombre: "Controlador Automático de Riego", precio: 18500 },
+                { nombre: "Boosters de CO2 para Indoor", precio: 7500 },
+                { nombre: "Micorrizas y Trichodermas", precio: 3200 },
+                { nombre: "Abono de Guano de Murciélago", precio: 4200 },
+                { nombre: "Regulador de Humedad", precio: 6500 },
+                { nombre: "Kit Completo de Cultivo Indoor", precio: 85000 }
+            ],
+            fumar: [
+                { nombre: "Pipas de Vidrio Soplado", precio: 3500 },
+                { nombre: "Bongs de 30cm con Percolador", precio: 12500 },
+                { nombre: "Papelillos OCB Premium", precio: 800 },
+                { nombre: "Grinders de 4 Piezas Metálicos", precio: 4200 },
+                { nombre: "Encendedores Torch para Bong", precio: 2800 },
+                { nombre: "Ceniceros de Silicona Plegables", precio: 1800 },
+                { nombre: "Pipas de Silicona Plegables", precio: 3200 },
+                { nombre: "Vaporizador Portátil PAX 3", precio: 65000 },
+                { nombre: "Blunt Wraps de Sabores", precio: 1200 },
+                { nombre: "Filtros Activados de Carbón", precio: 900 },
+                { nombre: "Limpiador para Pipas y Bongs", precio: 2500 },
+                { nombre: "Caja Hermética de Almacenamiento", precio: 5800 },
+                { nombre: "Rolling Machine Automática", precio: 1500 },
+                { nombre: "Tabla para Picar Prensado", precio: 2200 },
+                { nombre: "Kit de Limpieza para Grinders", precio: 1800 }
+            ],
+            merchandising: [
+                { nombre: "Camiseta 'Keep Calm and Grow'", precio: 4800 },
+                { nombre: "Gorra Bordada con Logo de Marihuana", precio: 3500 },
+                { nombre: "Pulseras de Hemp Tejido a Mano", precio: 1200 },
+                { nombre: "Stickers de Hojas de Cannabis", precio: 500 },
+                { nombre: "Taza de Cerámica 'Wake and Bake'", precio: 2800 },
+                { nombre: "Llaveros con Forma de Cogollo", precio: 1500 },
+                { nombre: "Posters de Cultivo de Interior", precio: 3200 },
+                { nombre: "Mochila con Compartimento Hermético", precio: 12500 },
+                { nombre: "Parches Bordados para Ropa", precio: 800 },
+                { nombre: "Libreta con Portada de Cáñamo", precio: 2200 },
+                { nombre: "Porta Moños con Imán Nevera", precio: 1800 },
+                { nombre: "Chapas Personalizadas de Cannabis", precio: 900 },
+                { nombre: "Alfombrilla de Ratón con Diseño", precio: 3200 },
+                { nombre: "Bolígrafos con Semillas Incrustadas", precio: 1500 },
+                { nombre: "Sudadera con Capucha 'Grow Life'", precio: 9800 }
+            ]
+        };
+
+        // Horarios de envío
+        const horariosEnvio = [
+            { dia: "Lunes a Viernes", horario: "9:00 - 18:00 hs" },
+            { dia: "Sábados", horario: "9:00 - 13:00 hs" },
+            { dia: "Domingos y Feriados", horario: "No hay envíos" }
+        ];
+
+        // Información de contacto
+        const infoContacto = {
+            telefono: "+54 11 1234-5678",
+            email: "info@growshoponline.com",
+            horarioAtencion: "Lunes a Viernes: 9:00 - 18:00 hs",
+            instagram: "https://instagram.com/growshoponline",
+            facebook: "https://facebook.com/growshoponline"
+        };
+
+        // Carrito de compras
+        let carrito = [];
+        let pedidoConfirmado = false;
+
+        // Elementos del DOM
+        const chatMessages = document.getElementById('chatMessages');
+        const userInput = document.getElementById('userInput');
+        const sendButton = document.getElementById('sendButton');
+        const categoryItems = document.querySelectorAll('.category-item');
+        const quickButtons = document.querySelectorAll('.quick-button');
+        const cartInfo = document.getElementById('cartInfo');
+        const viewCartBtn = document.getElementById('viewCartBtn');
+        const clearCartBtn = document.getElementById('clearCartBtn');
+
+        // Inicializar el chatbot
+        function initChatbot() {
+            addMessage("¡Hola! Soy el asistente virtual del Growshop Online. Puedo mostrarte nuestro catálogo de productos, ayudarte a armar tu pedido y brindarte información de contacto. ¿En qué puedo ayudarte?", "bot");
+            
+            // Mostrar mensaje de bienvenida inicial
+            mostrarMensajeBienvenida();
+            
+            // Actualizar resumen del carrito
+            actualizarResumenCarrito();
+        }
+
+        // Mostrar mensaje de bienvenida
+        function mostrarMensajeBienvenida() {
+            addMessage("Por favor, escribe un mensaje para comenzar. Puedes saludarme, preguntar por productos o usar los botones de acción rápida.", "bot");
+        }
+
+        // Agregar mensaje al chat
+        function addMessage(text, sender) {
+            const messageDiv = document.createElement('div');
+            messageDiv.classList.add('message', `${sender}-message`);
+            messageDiv.innerHTML = text;
+            chatMessages.appendChild(messageDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        // Establecer categoría activa
+        function setActiveCategory(category) {
+            categoryItems.forEach(item => {
+                if (item.dataset.category === category) {
+                    item.classList.add('active');
+                } else {
+                    item.classList.remove('active');
+                }
+            });
+        }
+
+        // Mostrar productos de una categoría
+        function mostrarProductos(categoria) {
+            const productosCategoria = productos[categoria];
+            let productosHTML = `<div class="products-container">`;
+            
+            productosCategoria.forEach((producto, index) => {
+                // Verificar si el producto ya está en el carrito
+                const enCarrito = carrito.some(item => item.nombre === producto.nombre);
+                
+                productosHTML += `
+                    <div class="product-item">
+                        <div class="product-info">
+                            <span class="product-number">${index + 1}</span>
+                            ${producto.nombre}
+                        </div>
+                        <div>
+                            <span style="color: #2e7d32; font-weight: bold; margin-right: 10px;">$${producto.precio.toLocaleString('es-AR')}</span>
+                            <button class="add-to-cart-btn ${enCarrito ? 'added' : ''}" 
+                                    data-nombre="${producto.nombre}" 
+                                    data-precio="${producto.precio}"
+                                    data-categoria="${categoria}"
+                                    ${enCarrito ? 'disabled' : ''}>
+                                ${enCarrito ? '<i class="fas fa-check"></i> Agregado' : '<i class="fas fa-cart-plus"></i> Agregar'}
+                            </button>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            productosHTML += `</div>`;
+            
+            // Mensaje según la categoría
+            let mensajeCategoria = "";
+            switch(categoria) {
+                case "cultivos":
+                    mensajeCategoria = "Aquí tienes nuestros productos de <strong>Cultivos y Orgánicos</strong>:";
+                    break;
+                case "fumar":
+                    mensajeCategoria = "Aquí tienes nuestros productos <strong>Para Fumar</strong>:";
+                    break;
+                case "merchandising":
+                    mensajeCategoria = "Aquí tienes nuestro <strong>Merchandising</strong>:";
+                    break;
+            }
+            
+            addMessage(mensajeCategoria + productosHTML + `<p>Puedes agregar productos a tu carrito haciendo clic en el botón "Agregar". Cada producto se agrega de a una unidad. Luego puedes ver tu pedido completo.</p>`, "bot");
+            
+            // Agregar event listeners a los botones de agregar al carrito
+            setTimeout(() => {
+                const addToCartButtons = document.querySelectorAll('.add-to-cart-btn:not(.added)');
+                addToCartButtons.forEach(button => {
+                    button.addEventListener('click', function() {
+                        const nombre = this.getAttribute('data-nombre');
+                        const precio = parseFloat(this.getAttribute('data-precio'));
+                        const categoria = this.getAttribute('data-categoria');
+                        agregarAlCarrito(nombre, precio, categoria);
+                    });
+                });
+            }, 100);
+        }
+
+        // Agregar producto al carrito (solo 1 unidad)
+        function agregarAlCarrito(nombre, precio, categoria) {
+            // Verificar si el producto ya está en el carrito
+            const productoExistente = carrito.find(item => item.nombre === nombre);
+            
+            if (productoExistente) {
+                // Si ya está en el carrito, no permitir agregarlo nuevamente
+                addMessage(`"${nombre}" ya está en tu carrito. Cada producto solo se puede agregar una vez.`, "bot");
+                return;
+            }
+            
+            // Agregar producto al carrito (solo 1 unidad)
+            carrito.push({
+                nombre: nombre,
+                precio: precio,
+                categoria: categoria,
+                cantidad: 1
+            });
+            
+            // Actualizar interfaz
+            actualizarResumenCarrito();
+            
+            // Actualizar botón en la lista de productos
+            const addToCartButtons = document.querySelectorAll('.add-to-cart-btn');
+            addToCartButtons.forEach(button => {
+                if (button.getAttribute('data-nombre') === nombre) {
+                    button.classList.add('added');
+                    button.innerHTML = '<i class="fas fa-check"></i> Agregado';
+                    button.disabled = true;
+                }
+            });
+            
+            // Mostrar mensaje de confirmación
+            addMessage(`<i class="fas fa-check-circle" style="color: #4caf50;"></i> "${nombre}" ha sido agregado a tu carrito.`, "bot");
+        }
+
+        // Eliminar producto del carrito
+        function eliminarDelCarrito(nombre) {
+            carrito = carrito.filter(item => item.nombre !== nombre);
+            actualizarResumenCarrito();
+            
+            // Actualizar botón en la lista de productos
+            const addToCartButtons = document.querySelectorAll('.add-to-cart-btn');
+            addToCartButtons.forEach(button => {
+                if (button.getAttribute('data-nombre') === nombre) {
+                    button.classList.remove('added');
+                    button.innerHTML = '<i class="fas fa-cart-plus"></i> Agregar';
+                    button.disabled = false;
+                }
+            });
+            
+            // Mostrar mensaje de confirmación
+            addMessage(`<i class="fas fa-trash-alt" style="color: #f44336;"></i> "${nombre}" ha sido eliminado de tu carrito.`, "bot");
+        }
+
+        // Vaciar carrito
+        function vaciarCarrito() {
+            if (carrito.length === 0) {
+                addMessage("Tu carrito ya está vacío.", "bot");
+                return;
+            }
+            
+            carrito = [];
+            actualizarResumenCarrito();
+            
+            // Actualizar todos los botones en la lista de productos
+            const addToCartButtons = document.querySelectorAll('.add-to-cart-btn');
+            addToCartButtons.forEach(button => {
+                button.classList.remove('added');
+                button.innerHTML = '<i class="fas fa-cart-plus"></i> Agregar';
+                button.disabled = false;
+            });
+            
+            addMessage("<i class='fas fa-shopping-cart' style='color: #ff9800;'></i> Tu carrito ha sido vaciado.", "bot");
+        }
+
+        // Actualizar resumen del carrito en el sidebar
+        function actualizarResumenCarrito() {
+            if (carrito.length === 0) {
+                cartInfo.innerHTML = `<p style="text-align: center; color: #666; font-style: italic;">Tu carrito está vacío</p>`;
+                return;
+            }
+            
+            let carritoHTML = '';
+            let total = 0;
+            
+            // Mostrar solo los primeros 3 items para no saturar el sidebar
+            const itemsAMostrar = carrito.slice(0, 3);
+            
+            itemsAMostrar.forEach(item => {
+                const subtotal = item.precio * item.cantidad;
+                total += subtotal;
+                
+                carritoHTML += `
+                    <div class="cart-item">
+                        <div class="cart-item-name">${item.nombre.substring(0, 20)}${item.nombre.length > 20 ? '...' : ''}</div>
+                        <div class="cart-item-price">$${item.precio.toLocaleString('es-AR')}</div>
+                    </div>
+                `;
+            });
+            
+            // Si hay más de 3 items, mostrar indicador
+            if (carrito.length > 3) {
+                carritoHTML += `<div class="cart-item" style="justify-content: center; font-style: italic; color: #666;">... y ${carrito.length - 3} más</div>`;
+                
+                // Calcular el total completo
+                total = carrito.reduce((sum, item) => sum + (item.precio * item.cantidad), 0);
+            }
+            
+            carritoHTML += `
+                <div class="cart-total">
+                    <span>Total:</span>
+                    <span>$${total.toLocaleString('es-AR')}</span>
+                </div>
+            `;
+            
+            cartInfo.innerHTML = carritoHTML;
+        }
+
+        // Mostrar pedido completo
+        function mostrarPedido() {
+            if (carrito.length === 0) {
+                addMessage("Tu carrito está vacío. Agrega algunos productos para ver tu pedido.", "bot");
+                return;
+            }
+            
+            let pedidoHTML = `<div class="pedido-container">`;
+            pedidoHTML += `<h4><i class="fas fa-shopping-bag"></i> Tu Pedido Completo</h4>`;
+            
+            pedidoHTML += `<div class="order-items">`;
+            
+            let total = 0;
+            
+            carrito.forEach((item, index) => {
+                const subtotal = item.precio * item.cantidad;
+                total += subtotal;
+                
+                pedidoHTML += `
+                    <div class="order-item">
+                        <div class="order-item-name">
+                            <strong>${item.nombre}</strong>
+                            <div style="font-size: 0.85rem; color: #666;">Categoría: ${item.categoria}</div>
+                        </div>
+                        <div class="order-item-price">$${item.precio.toLocaleString('es-AR')}</div>
+                        <button class="remove-item-btn" data-nombre="${item.nombre}">
+                            <i class="fas fa-times"></i> Eliminar
+                        </button>
+                    </div>
+                `;
+            });
+            
+            pedidoHTML += `</div>`;
+            
+            pedidoHTML += `
+                <div class="order-total">
+                    <span>Total del Pedido:</span>
+                    <span>$${total.toLocaleString('es-AR')}</span>
+                </div>
+            `;
+            
+            pedidoHTML += `
+                <div class="order-actions">
+                    <button class="order-button confirm" id="confirmOrderBtn">
+                        <i class="fas fa-check-circle"></i> Confirmar Pedido
+                    </button>
+                    <button class="order-button cancel" id="cancelOrderBtn">
+                        <i class="fas fa-times-circle"></i> Cancelar Pedido
+                    </button>
+                </div>
+            `;
+            
+            pedidoHTML += `</div>`;
+            
+            addMessage(pedidoHTML, "bot");
+            
+            // Agregar event listeners a los botones de eliminar
+            setTimeout(() => {
+                const removeButtons = document.querySelectorAll('.remove-item-btn');
+                removeButtons.forEach(button => {
+                    button.addEventListener('click', function() {
+                        const nombre = this.getAttribute('data-nombre');
+                        eliminarDelCarrito(nombre);
+                        // Actualizar la vista del pedido si está abierta
+                        if (document.querySelector('.pedido-container')) {
+                            mostrarPedido();
+                        }
+                    });
+                });
+                
+                // Event listener para confirmar pedido
+                const confirmOrderBtn = document.getElementById('confirmOrderBtn');
+                if (confirmOrderBtn) {
+                    confirmOrderBtn.addEventListener('click', confirmarPedido);
+                }
+                
+                // Event listener para cancelar pedido
+                const cancelOrderBtn = document.getElementById('cancelOrderBtn');
+                if (cancelOrderBtn) {
+                    cancelOrderBtn.addEventListener('click', function() {
+                        vaciarCarrito();
+                        addMessage("Tu pedido ha sido cancelado. ¿Te gustaría ver algún producto en particular?", "bot");
+                    });
+                }
+            }, 100);
+        }
+
+        // Confirmar pedido
+        function confirmarPedido() {
+            let total = carrito.reduce((sum, item) => sum + (item.precio * item.cantidad), 0);
+            const numeroPedido = Math.floor(1000 + Math.random() * 9000);
+            
+            let confirmacionHTML = `<div class="confirmacion-container">`;
+            confirmacionHTML += `<h4 style="color: #4caf50;"><i class="fas fa-check-circle"></i> ¡Pedido Confirmado!</h4>`;
+            confirmacionHTML += `<p style="font-size: 1.1rem; margin: 15px 0; font-weight: bold;">¡Genial! Tu pedido fue creado con éxito.</p>`;
+            confirmacionHTML += `<p style="margin-bottom: 10px;">En <strong>72 horas hábiles</strong> recibirás tu orden.</p>`;
+            confirmacionHTML += `<p style="margin-bottom: 15px;">¡Muchas gracias por comprar en <strong>Growshop Online</strong>!</p>`;
+            
+            confirmacionHTML += `<div style="background-color: white; padding: 15px; border-radius: 8px; margin: 15px 0; border-left: 4px solid #4caf50;">`;
+            confirmacionHTML += `<p><strong>Número de pedido:</strong> #${numeroPedido}</p>`;
+            confirmacionHTML += `<p><strong>Total:</strong> $${total.toLocaleString('es-AR')}</p>`;
+            confirmacionHTML += `<p><strong>Cantidad de productos:</strong> ${carrito.length}</p>`;
+            confirmacionHTML += `</div>`;
+            
+            confirmacionHTML += `<p style="font-style: italic; color: #666; margin-top: 15px;">Te contactaremos al teléfono o email registrado para coordinar detalles del envío.</p>`;
+            confirmacionHTML += `</div>`;
+            
+            addMessage(confirmacionHTML, "bot");
+            
+            // Marcar que el pedido fue confirmado
+            pedidoConfirmado = true;
+            
+            // Vaciar carrito después de confirmar
+            carrito = [];
+            actualizarResumenCarrito();
+            
+            // Actualizar todos los botones en la lista de productos
+            const addToCartButtons = document.querySelectorAll('.add-to-cart-btn');
+            addToCartButtons.forEach(button => {
+                button.classList.remove('added');
+                button.innerHTML = '<i class="fas fa-cart-plus"></i> Agregar';
+                button.disabled = false;
+            });
+            
+            // Después de 1.5 segundos, preguntar si necesita más ayuda
+            setTimeout(() => {
+                addMessage("¿Puedo ayudarte en algo más?", "bot");
+            }, 1500);
+        }
+
+        // Mostrar horarios de envío
+        function mostrarHorarios() {
+            let horariosHTML = `<div class="horarios-container">`;
+            horariosHTML += `<h4><i class="fas fa-truck"></i> Horarios de Envío Disponibles</h4>`;
+            
+            horariosEnvio.forEach(horario => {
+                horariosHTML += `<p><strong>${horario.dia}:</strong> ${horario.horario}</p>`;
+            });
+            
+            horariosHTML += `<p style="margin-top: 10px;"><em>Los pedidos realizados antes de las 15:00 hs se envían el mismo día.</em></p>`;
+            horariosHTML += `<p><em>El tiempo de entrega es de 72 horas hábiles una vez confirmado el pedido.</em></p>`;
+            horariosHTML += `</div>`;
+            
+            addMessage(horariosHTML, "bot");
+        }
+
+        // Mostrar información de contacto
+        function mostrarContacto() {
+            let contactoHTML = `<div class="contacto-container">`;
+            contactoHTML += `<h4><i class="fas fa-address-book"></i> Información de Contacto</h4>`;
+            
+            contactoHTML += `
+                <div style="margin-bottom: 15px;">
+                    <p><strong><i class="fas fa-phone"></i> Teléfono:</strong> ${infoContacto.telefono}</p>
+                    <p><strong><i class="fas fa-envelope"></i> Email:</strong> ${infoContacto.email}</p>
+                    <p><strong><i class="fas fa-clock"></i> Horario de Atención:</strong> ${infoContacto.horarioAtencion}</p>
+                </div>
+            `;
+            
+            contactoHTML += `
+                <div>
+                    <p style="margin-bottom: 8px;"><strong>Síguenos en redes sociales:</strong></p>
+                    <div style="display: flex; gap: 15px;">
+                        <a href="${infoContacto.instagram}" target="_blank" style="display: inline-flex; align-items: center; color: #E1306C; text-decoration: none;">
+                            <i class="fab fa-instagram" style="font-size: 1.2rem; margin-right: 5px;"></i> Instagram
+                        </a>
+                        <a href="${infoContacto.facebook}" target="_blank" style="display: inline-flex; align-items: center; color: #1877F2; text-decoration: none;">
+                            <i class="fab fa-facebook" style="font-size: 1.2rem; margin-right: 5px;"></i> Facebook
+                        </a>
+                    </div>
+                </div>
+            `;
+            
+            contactoHTML += `<p style="margin-top: 15px;"><em>¡Contáctanos para consultas, pedidos especiales o asistencia personalizada!</em></p>`;
+            contactoHTML += `</div>`;
+            
+            addMessage(contactoHTML, "bot");
+        }
+
+        // Procesar entrada del usuario
+        function processUserInput() {
+            const text = userInput.value.trim().toLowerCase();
+            
+            if (text === "") return;
+            
+            // Mostrar mensaje del usuario
+            addMessage(text, "user");
+            
+            // Limpiar input
+            userInput.value = "";
+            
+            // Procesar según el texto
+            setTimeout(() => {
+                // Si el pedido fue confirmado y el usuario responde algo después
+                if (pedidoConfirmado && (text.includes('sí') || text.includes('si') || text.includes('claro') || text.includes('por favor') || text.includes('ok') || text.includes('dale'))) {
+                    pedidoConfirmado = false; // Resetear el estado
+                    addMessage("¡Perfecto! ¿En qué más puedo ayudarte? Puedes seleccionar una categoría para ver productos o usar los botones de acción rápida.", "bot");
+                } 
+                else if (pedidoConfirmado && (text.includes('no') || text.includes('gracias') || text.includes('nada') || text.includes('eso es todo'))) {
+                    pedidoConfirmado = false; // Resetear el estado
+                    addMessage("¡De nada! Fue un placer ayudarte. ¡Que tengas un excelente día! 🌿", "bot");
+                }
+                else if (text.includes('hola') || text.includes('buenas') || text.includes('buenos') || text.includes('saludos')) {
+                    addMessage("¡Hola! ¿En qué puedo ayudarte? Puedes seleccionar una categoría para ver los productos o armar tu pedido.", "bot");
+                } else if (text.includes('cultivo') || text.includes('orgánico') || text.includes('semilla') || text.includes('fertilizante')) {
+                    setActiveCategory('cultivos');
+                    mostrarProductos('cultivos');
+                } else if (text.includes('fumar') || text.includes('pipas') || text.includes('bong') || text.includes('grinder') || text.includes('papelillo')) {
+                    setActiveCategory('fumar');
+                    mostrarProductos('fumar');
+                } else if (text.includes('merchandising') || text.includes('ropa') || text.includes('accesorio') || text.includes('camiseta') || text.includes('gorra')) {
+                    setActiveCategory('merchandising');
+                    mostrarProductos('merchandising');
+                } else if (text.includes('horario') || text.includes('envío') || text.includes('entrega') || text.includes('tiempo de entrega')) {
+                    mostrarHorarios();
+                } else if (text.includes('contacto') || text.includes('teléfono') || text.includes('email') || text.includes('correo') || text.includes('redes') || text.includes('whatsapp')) {
+                    mostrarContacto();
+                } else if (text.includes('carrito') || text.includes('pedido') || text.includes('compra') || text.includes('ver mi pedido')) {
+                    mostrarPedido();
+                } else if (text.includes('gracias') || text.includes('thanks') || text.includes('agradecido') || text.includes('agradecida')) {
+                    addMessage("¡De nada! Estoy aquí para ayudarte. ¿Necesitas algo más?", "bot");
+                } else if (text.includes('ayuda') || text.includes('help') || text.includes('qué puedes hacer') || text.includes('qué haces')) {
+                    addMessage("Puedo ayudarte con:<br>1. Mostrarte productos por categoría<br>2. Agregar productos a tu carrito (solo una unidad de cada)<br>3. Ver y confirmar tu pedido<br>4. Consultar horarios de envío<br>5. Brindarte información de contacto<br><br>¿Qué te gustaría hacer?", "bot");
+                } else if (text.includes('producto') || text.includes('catálogo') || text.includes('ver productos') || text.includes('qué tienen') || text.includes('mostrar')) {
+                    addMessage("Tenemos productos en tres categorías:<br>1. <strong>Cultivos y Orgánicos</strong><br>2. <strong>Para Fumar</strong><br>3. <strong>Merchandising</strong><br><br>¿Qué categoría te interesa? Puedes seleccionarla del menú lateral o escribirla.", "bot");
+                } else {
+                    addMessage("No estoy seguro de entenderte. Puedes seleccionar una categoría del menú lateral, agregar productos a tu carrito o preguntar por información específica. También puedes usar los botones de acción rápida.", "bot");
+                }
+            }, 500);
+        }
+
+        // Event Listeners
+        sendButton.addEventListener('click', processUserInput);
+        
+        userInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                processUserInput();
+            }
+        });
+
+        // Categorías del sidebar
+        categoryItems.forEach(item => {
+            item.addEventListener('click', function() {
+                const categoria = this.dataset.category;
+                setActiveCategory(categoria);
+                // Solo mostrar productos si el usuario ya interactuó
+                if (chatMessages.children.length > 2) { // Más que solo el mensaje inicial
+                    mostrarProductos(categoria);
+                } else {
+                    addMessage("Por favor, primero envía un mensaje para comenzar la conversación.", "bot");
+                }
+            });
+        });
+
+        // Botones rápidos
+        quickButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const action = this.dataset.action;
+                
+                // Solo procesar si el usuario ya interactuó
+                if (chatMessages.children.length <= 2) { // Solo mensaje inicial
+                    addMessage("Por favor, primero envía un mensaje para comenzar la conversación.", "bot");
+                    return;
+                }
+                
+                switch(action) {
+                    case 'cultivos':
+                        setActiveCategory('cultivos');
+                        mostrarProductos('cultivos');
+                        break;
+                    case 'fumar':
+                        setActiveCategory('fumar');
+                        mostrarProductos('fumar');
+                        break;
+                    case 'merchandising':
+                        setActiveCategory('merchandising');
+                        mostrarProductos('merchandising');
+                        break;
+                    case 'horarios':
+                        mostrarHorarios();
+                        break;
+                    case 'contacto':
+                        mostrarContacto();
+                        break;
+                    case 'pedido':
+                        mostrarPedido();
+                        break;
+                }
+            });
+        });
+
+        // Botones del carrito
+        viewCartBtn.addEventListener('click', function() {
+            if (chatMessages.children.length <= 2) { // Solo mensaje inicial
+                addMessage("Por favor, primero envía un mensaje para comenzar la conversación.", "bot");
+                return;
+            }
+            mostrarPedido();
+        });
+        
+        clearCartBtn.addEventListener('click', function() {
+            if (chatMessages.children.length <= 2) { // Solo mensaje inicial
+                addMessage("Por favor, primero envía un mensaje para comenzar la conversación.", "bot");
+                return;
+            }
+            vaciarCarrito();
+        });
+
+        // Inicializar el chatbot cuando se carga la página
+        document.addEventListener('DOMContentLoaded', initChatbot);
+    </script>
+</body>
+</html>
